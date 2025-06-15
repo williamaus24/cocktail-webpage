@@ -19,6 +19,12 @@
             color: #333;
         }
 
+        #scoreDisplay,
+        #timerDisplay {
+            font-weight: bold;
+            margin: 0.5rem;
+        }
+
         #quiz {
             max-width: 500px;
             background: white;
@@ -71,6 +77,7 @@
         .result {
             font-weight: bold;
             margin-top: 1rem;
+            white-space: pre-wrap;
         }
 
         #history {
@@ -92,6 +99,8 @@
 <body>
 
     <h1>🍸 Cocktail Quiz Game</h1>
+    <div id="scoreDisplay">Score: 0</div>
+    <div id="timerDisplay">Time Left: 20s</div>
 
     <div id="quiz">
         <img id="cocktailImage" src="" alt="Cocktail Image" />
@@ -112,29 +121,183 @@
 
     <script>
         const cocktails = [
-            { name: "Whiskey Sour", ingredients: ["50ml Jim Beam White", "25ml fresh lemon juice", "20ml simple syrup"], image: "https://www.thecocktaildb.com/images/media/drink/hbkfsh1589574990.jpg" },
-            { name: "Old Fashioned", ingredients: ["60ml Jim Beam White", "1 sugar cube (or 10ml simple syrup)", "2-3 dashes Angostura bitters", "Splash of water"], image: "https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg" },
-            { name: "Gin and Tonic", ingredients: ["50ml Gordon Gin", "Tonic water", "Lime wedge"], image: "https://www.thecocktaildb.com/images/media/drink/qcgz0t1643821443.jpg" },
-            { name: "Tom Collins", ingredients: ["45ml Gordon Gin", "30ml lemon juice", "15ml simple syrup", "Soda water"], image: "https://www.thecocktaildb.com/images/media/drink/7cll921606854636.jpg" },
-            { name: "Moscow Mule", ingredients: ["50ml Smirnoff Red", "15ml lime juice", "Ginger beer"], image: "https://www.thecocktaildb.com/images/media/drink/3pylqc1504370988.jpg" },
-            { name: "Vodka Martini", ingredients: ["60ml Smirnoff Red", "10ml dry vermouth (optional)"], image: "https://www.thecocktaildb.com/images/media/drink/qyxrqw1439906528.jpg" },
-            { name: "Margarita", ingredients: ["50ml Jose Cuervo", "20ml lime juice", "15ml Cointreau", "Salt for rim"], image: "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg" },
-            { name: "Tequila Sunrise", ingredients: ["50ml Jose Cuervo", "Orange juice", "15ml Grenadine Monin"], image: "https://www.thecocktaildb.com/images/media/drink/quqyqp1480879103.jpg" }
+            {
+                name: "Whiskey Sour",
+                ingredients: ["50ml Jim Beam White (Whiskey)", "25ml fresh lemon juice", "20ml simple syrup"],
+                image: "https://www.thecocktaildb.com/images/media/drink/hbkfsh1589574990.jpg",
+                description: "Shake whiskey, lemon juice, and syrup with ice. Strain into a rocks glass and garnish with cherry/orange.",
+                trivia: "A 19th‑century classic, popular at NYC’s Waldorf‑Astoria." // image source :contentReference[oaicite:4]{index=4}
+            },
+            {
+                name: "Old Fashioned",
+                ingredients: ["60ml Jim Beam White (Whiskey)", "1 sugar cube (or 10ml simple syrup)", "2‑3 dashes Angostura bitters", "Splash of water"],
+                image: "https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg",
+                description: "Muddle sugar, bitters, and water. Add whiskey and ice. Stir and garnish with orange peel.",
+                trivia: "One of the oldest cocktails, dating back to the early 1800s." // image source :contentReference[oaicite:5]{index=5}
+            },
+            {
+                name: "Gin and Tonic",
+                ingredients: ["50ml Gordon Gin (Gin)", "Tonic water", "Lime wedge"],
+                image: "https://www.thecocktaildb.com/images/media/drink/qcgz0t1643821443.jpg",
+                description: "Pour gin over ice, top with tonic water, stir, garnish with lime wedge.",
+                trivia: "Originated in British colonies to disguise quinine’s bitterness."
+            },
+            {
+                name: "Tom Collins",
+                ingredients: ["45ml Gordon Gin (Gin)", "30ml lemon juice", "15ml simple syrup", "Soda water"],
+                image: "https://www.thecocktaildb.com/images/media/drink/7cll921606854636.jpg",
+                description: "Shake gin, lemon juice, syrup with ice. Strain into highball, top with soda, garnish cherry/orange.",
+                trivia: "Named after a famous 1874 hoax; one of the earliest tall cocktails."
+            },
+            {
+                name: "Moscow Mule",
+                ingredients: ["50ml Smirnoff Red (Vodka)", "15ml lime juice", "Ginger beer"],
+                image: "https://www.thecocktaildb.com/images/media/drink/3pylqc1504370988.jpg",
+                description: "Pour vodka and lime over ice in copper mug. Top with ginger beer, garnish lime.",
+                trivia: "Invented in 1940s to boost vodka and ginger beer sales."
+            },
+            {
+                name: "Vodka Martini",
+                ingredients: ["60ml Smirnoff Red (Vodka)", "10ml dry vermouth (optional)"],
+                image: "https://www.thecocktaildb.com/images/media/drink/qyxrqw1439906528.jpg",
+                description: "Stir or shake with ice, strain into chilled martini glass, garnish with olive or twist.",
+                trivia: "Famous via James Bond: 'shaken, not stirred'."
+            },
+            {
+                name: "Margarita",
+                ingredients: ["50ml Jose Cuervo (Tequila)", "20ml lime juice", "15ml Cointreau", "Salt for rim"],
+                image: "https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg",
+                description: "Shake with ice, strain into salt-rimmed glass. Garnish with lime wheel.",
+                trivia: "A staple Mexican cocktail especially loved in summer."
+            },
+            {
+                name: "Tequila Sunrise",
+                ingredients: ["50ml Jose Cuervo (Tequila)", "Orange juice", "15ml Grenadine Monin"],
+                image: "https://www.thecocktaildb.com/images/media/drink/quqyqp1480879103.jpg",
+                description: "Pour tequila and OJ over ice, slowly add grenadine for gradient effect.",
+                trivia: "Made famous by the Rolling Stones’ 1972 tour."
+            },
+            {
+                name: "Mojito",
+                ingredients: ["50ml Bacardi Light (Rum)", "20ml lime juice", "2 tsp sugar", "Soda water", "Mint leaves"],
+                image: "https://www.thecocktaildb.com/images/media/drink/metwgh1606770327.jpg",
+                description: "Muddle mint with sugar & lime. Add rum + ice, top with soda, garnish mint.",
+                trivia: "A Cuban classic once favored by Ernest Hemingway."
+            },
+            {
+                name: "Daiquiri",
+                ingredients: ["60ml Bacardi Light (Rum)", "25ml lime juice", "20ml simple syrup"],
+                image: "https://www.thecocktaildb.com/images/media/drink/mrz9091589574515.jpg",
+                description: "Shake with ice, strain into coupe glass, garnish with lime wheel.",
+                trivia: "Named after a small Cuban mining town."
+            },
+            {
+                name: "Dark ‘n’ Stormy",
+                ingredients: ["60ml Captain Morgan (Dark Rum)", "Ginger beer", "Lime juice"],
+                image: "https://www.thecocktaildb.com/images/media/drink/t1tn0s1504374905.jpg",
+                description: "Add ginger beer over ice, float rum, add lime juice.",
+                trivia: "Gosling’s trademarked the name ‘Dark ‘n’ Stormy’."
+            },
+            {
+                name: "Piña Colada",
+                ingredients: ["50ml Malibu (Coconut Rum)", "30ml pineapple juice", "20ml coconut cream"],
+                image: "https://www.thecocktaildb.com/images/media/drink/cpf4j51504371346.jpg",
+                description: "Blend with ice or shake, strain into glass, garnish pineapple slice.",
+                trivia: "Puerto Rico’s official drink since 1978."
+            },
+            {
+                name: "Amaretto Sour",
+                ingredients: ["50ml Amaretto (Liqueur)", "25ml lemon juice", "15ml simple syrup", "Egg white (optional)"],
+                image: "https://www.thecocktaildb.com/images/media/drink/xnzc541493070211.jpg",
+                description: "Shake vigorously with ice. Strain into rocks glass, garnish cherry.",
+                trivia: "Smooth, nutty Italian-inspired twist on the sour."
+            },
+            {
+                name: "Singapore Sling (variation)",
+                ingredients: ["30ml Cherry Brandy", "15ml Gordon Gin", "Pineapple juice", "10ml lime juice", "Dash Grenadine Monin"],
+                image: "https://www.thecocktaildb.com/images/media/drink/8xnyke1504352207.jpg",
+                description: "Shake all with ice, strain into highball, garnish cherry & orange.",
+                trivia: "Originated at Raffles Hotel, Singapore."
+            },
+            {
+                name: "Peach Bellini",
+                ingredients: ["50ml Bols Peach (Liqueur)", "Peach puree", "Prosecco or sparkling wine (optional)"],
+                image: "https://www.thecocktaildb.com/images/media/drink/eaag491504367543.jpg",
+                description: "Pour liqueur & puree into flute, top with sparkling wine.",
+                trivia: "Created in 1930s at Harry’s Bar in Venice."
+            },
+            {
+                name: "White Russian",
+                ingredients: ["50ml Baileys (Cream Liqueur)", "20ml Smirnoff Red (Vodka)", "20ml Kahlua"],
+                image: "https://www.thecocktaildb.com/images/media/drink/vsrupw1472405732.jpg",
+                description: "Pour over ice in rocks glass, stir gently.",
+                trivia: "Popularized by ‘The Dude’ in *The Big Lebowski*."
+            },
+            {
+                name: "Black Russian",
+                ingredients: ["50ml Kahlua (Coffee Liqueur)", "20ml Smirnoff Red (Vodka)"],
+                image: "https://www.thecocktaildb.com/images/media/drink/8oxlqf1606772765.jpg",
+                description: "Pour both over ice, stir gently.",
+                trivia: "Created in 1940s Brussels."
+            },
+            {
+                name: "Blue Lagoon",
+                ingredients: ["30ml Bols Blue Curacao", "30ml Smirnoff Red (Vodka)", "20ml lemon juice", "Sprite or soda"],
+                image: "https://www.thecocktaildb.com/images/media/drink/7stuuh1504885399.jpg",
+                description: "Shake curacao, vodka & lemon. Strain into highball, top with soda.",
+                trivia: "Named after 1980s movie & its vivid blue hue."
+            },
+            {
+                name: "Jager Bomb",
+                ingredients: ["50ml Jagermeister (Herbal Liqueur)", "Energy drink (or soda)"],
+                image: "https://www.thecocktaildb.com/images/media/drink/xxsxqy1472668106.jpg",
+                description: "Pour Jager into shot glass. Drop into energy drink glass and drink.",
+                trivia: "A popular party shooter among young adults."
+            },
+            {
+                name: "Shirley Temple (vodka variation)",
+                ingredients: ["20ml Grenadine Monin", "Ginger ale or Sprite", "30ml Smirnoff Red (Vodka, optional)"],
+                image: "https://www.thecocktaildb.com/images/media/drink/xypspq1469090633.jpg",
+                description: "Pour grenadine over ice, top with soda. Add vodka for adult version.",
+                trivia: "Named after child actress; classic without alcohol."
+            },
+            {
+                name: "Cosmopolitan",
+                ingredients: ["40ml Smirnoff Red (Vodka)", "15ml Cointreau", "20ml cranberry juice", "10ml lime juice"],
+                image: "https://www.thecocktaildb.com/images/media/drink/kpsajh1504368362.jpg",
+                description: "Shake with ice, strain into martini glass, garnish with lime twist.",
+                trivia: "Made iconic by *Sex and the City* in the 1990s."
+            }
         ];
 
         const allIngredients = Array.from(new Set(cocktails.flatMap(c => c.ingredients)));
         let currentIndex = 0;
         let quizOrder = cocktails.sort(() => Math.random() - 0.5);
         const historyList = [];
+        let score = 0;
+        let timer;
+        let timeLeft = 20;
 
         function loadQuestion() {
+            clearInterval(timer);
+            timeLeft = 20;
+            document.getElementById("timerDisplay").innerText = `Time Left: ${timeLeft}s`;
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById("timerDisplay").innerText = `Time Left: ${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    checkAnswer(true);
+                }
+            }, 1000);
+
             document.getElementById("resultText").innerText = "";
             document.getElementById("nextBtn").style.display = "none";
             document.getElementById("checkBtn").style.display = "inline-block";
             document.getElementById("hintBtn").style.display = "inline-block";
 
             const quizData = quizOrder[currentIndex];
-            document.getElementById("questionText").innerText = `Which ingredients are used in a "${quizData.name}"?`;
+            document.getElementById("questionText").innerText = `Which ingredients are used in a \"${quizData.name}\"?`;
             document.getElementById("cocktailImage").src = quizData.image;
 
             const optionsContainer = document.getElementById("optionsContainer");
@@ -160,17 +323,28 @@
                 .slice(0, count);
         }
 
-        function checkAnswer() {
+        function checkAnswer(timeout = false) {
+            clearInterval(timer);
             const selected = Array.from(document.querySelectorAll("input[type=checkbox]:checked")).map(cb => cb.value);
             const correct = quizOrder[currentIndex].ingredients;
             const correctSet = new Set(correct);
+            const cocktail = quizOrder[currentIndex];
 
             const isCorrect = correct.length === selected.length && selected.every(val => correctSet.has(val));
-            const cocktailName = quizOrder[currentIndex].name;
+            const cocktailName = cocktail.name;
 
-            document.getElementById("resultText").innerText = isCorrect
+            const resultText = isCorrect
                 ? "✅ Correct! Cheers!"
-                : `❌ Not quite. Correct ingredients:\n${correct.join(", ")}`;
+                : timeout
+                    ? `⏰ Time's up! Correct ingredients:\n${correct.join(", ")}`
+                    : `❌ Not quite. Correct ingredients:\n${correct.join(", ")}`;
+
+            const description = `\n\n🍹 Description: ${cocktail.description}`;
+
+            document.getElementById("resultText").innerText = resultText + description;
+
+            if (isCorrect) score++;
+            document.getElementById("scoreDisplay").innerText = `Score: ${score}`;
 
             addToHistory(cocktailName, isCorrect);
 
@@ -184,7 +358,8 @@
             if (currentIndex < quizOrder.length) {
                 loadQuestion();
             } else {
-                document.getElementById("quiz").innerHTML = "<h2>🎉 You finished the quiz! You now know all the cocktails!</h2>";
+                clearInterval(timer);
+                document.getElementById("quiz").innerHTML = `<h2>🎉 You finished the quiz! You scored ${score}/${quizOrder.length}!</h2>`;
             }
         }
 
